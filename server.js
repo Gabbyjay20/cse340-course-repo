@@ -1,6 +1,10 @@
 import "dotenv/config";
 import express from "express";
 
+import { showOrganizations } from "./src/controllers/organizationsController.js";
+import { showProjects } from "./src/controllers/projectsController.js";
+import { showCategories } from "./src/controllers/categoriesController.js";
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -14,43 +18,11 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.get("/organizations", async (req, res) => {
-  res.render("organizations", {
-    title: "Organizations"
-  });
-});
+app.get("/organizations", showOrganizations);
 
-app.get("/projects", async (req, res) => {
-  res.render("projects", {
-    title: "Projects"
-  });
-});
+app.get("/projects", showProjects);
 
-app.get("/categories", async (req, res) => {
-
-  const pg = await import("pg");
-
-  const { Pool } = pg.default;
-
-  const pool = new Pool({
-    connectionString: process.env.DB_URL,
-    ssl: {
-      rejectUnauthorized: false
-    }
-  });
-
-  const result = await pool.query(`
-    SELECT category_id, name
-    FROM public.category
-    ORDER BY name;
-  `);
-
-  res.render("categories", {
-    title: "Service Project Categories",
-    categories: result.rows
-  });
-
-});
+app.get("/categories", showCategories);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
