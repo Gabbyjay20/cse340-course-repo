@@ -41,4 +41,33 @@ const getProjectsByCategoryId = async (id) => {
   return result.rows;
 };
 
-export { getAllCategories, getCategoryById, getProjectsByCategoryId };
+const createCategory = async (name) => {
+  const query = `
+    INSERT INTO public.category (name)
+    VALUES ($1)
+    RETURNING category_id, name;
+  `;
+
+  const result = await db.query(query, [name]);
+  return result.rows[0];
+};
+
+const updateCategory = async (id, name) => {
+  const query = `
+    UPDATE public.category
+    SET name = $1
+    WHERE category_id = $2
+    RETURNING category_id, name;
+  `;
+
+  const result = await db.query(query, [name, id]);
+  return result.rows[0];
+};
+
+export {
+  getAllCategories,
+  getCategoryById,
+  getProjectsByCategoryId,
+  createCategory,
+  updateCategory
+};

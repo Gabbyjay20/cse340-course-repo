@@ -1,5 +1,9 @@
 <%- include("partials/header") %>
 
+<p>
+  <a href="/new-category">Create New Category</a>
+</p>
+
 <h1><%= title %></h1>
 
 <ul class="category-list">
@@ -7,6 +11,12 @@
     <li>
       <a href="/category/<%= category.category_id %>">
         <%= category.name %>
+      </a>
+
+      |
+
+      <a href="/edit-category/<%= category.category_id %>">
+        Edit
       </a>
     </li>
   <% }) %>

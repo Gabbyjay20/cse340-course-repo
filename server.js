@@ -1,5 +1,7 @@
 import "dotenv/config";
 import express from "express";
+import session from "express-session";
+import flash from "connect-flash";
 import router from "./src/routes.js";
 
 const app = express();
@@ -8,6 +10,20 @@ const port = process.env.PORT || 3000;
 app.set("view engine", "ejs");
 
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
+
+app.use(session({
+  secret: "cse340-secret",
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.messages = req.flash();
+  next();
+});
 
 app.use("/", router);
 
