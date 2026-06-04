@@ -67,6 +67,55 @@ const getAllCategoriesForAssignment = async () => {
   return result.rows;
 };
 
+const createProject = async (project) => {
+  const query = `
+    INSERT INTO public.project (
+      organization_id,
+      title,
+      description,
+      location,
+      project_date
+    )
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING project_id;
+  `;
+
+  const values = [
+    project.organization_id,
+    project.title,
+    project.description,
+    project.location,
+    project.project_date
+  ];
+
+  const result = await db.query(query, values);
+  return result.rows[0];
+};
+
+const updateProject = async (id, project) => {
+  const query = `
+    UPDATE public.project
+    SET
+      organization_id = $1,
+      title = $2,
+      description = $3,
+      location = $4,
+      project_date = $5
+    WHERE project_id = $6;
+  `;
+
+  const values = [
+    project.organization_id,
+    project.title,
+    project.description,
+    project.location,
+    project.project_date,
+    id
+  ];
+
+  await db.query(query, values);
+};
+
 const updateProjectCategories = async (projectId, categoryIds) => {
   await db.query(
     `
@@ -92,5 +141,7 @@ export {
   getProjectById,
   getCategoriesByProjectId,
   getAllCategoriesForAssignment,
+  createProject,
+  updateProject,
   updateProjectCategories
 };
