@@ -1,0 +1,17 @@
+<%- include("partials/header") %>
+
+<h1>Dashboard</h1>
+
+<p>Welcome <%= user.name %></p>
+
+<% if (user.role === "admin") { %>
+  <p>
+    <a href="/users">View All Users</a>
+  </p>
+<% } %>
+
+<form action="/logout" method="POST">
+  <button type="submit">Logout</button>
+</form>
+
+<%- include("partials/footer") %>

@@ -22,6 +22,7 @@ app.use(flash());
 
 app.use((req, res, next) => {
   res.locals.messages = req.flash();
+  res.locals.currentUser = req.session.user || null;
   next();
 });
 

@@ -2,6 +2,22 @@ import express from "express";
 import { body } from "express-validator";
 
 import {
+  showRegisterForm,
+  registerUser,
+  showLoginForm,
+  loginUser,
+  showDashboard,
+  logoutUser
+} from "./controllers/authController.js";
+
+import { showUsers } from "./controllers/usersController.js";
+
+import {
+  requireLogin,
+  requireRole
+} from "./middleware/auth.js";
+
+import {
   showOrganizations,
   showOrganizationDetails,
   showNewOrganizationForm,
@@ -32,6 +48,19 @@ import {
 
 const router = express.Router();
 
+const registerValidationRules = [
+  body("name").trim().notEmpty().withMessage("Name is required."),
+  body("email").isEmail().withMessage("Valid email is required."),
+  body("password")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters.")
+];
+
+const loginValidationRules = [
+  body("email").isEmail().withMessage("Valid email is required."),
+  body("password").notEmpty().withMessage("Password is required.")
+];
+
 const organizationValidationRules = [
   body("name").trim().notEmpty().withMessage("Organization name is required."),
   body("description").trim().notEmpty().withMessage("Description is required."),
@@ -61,6 +90,22 @@ router.get("/", (req, res) => {
     title: "Home Page"
   });
 });
+
+/* AUTH */
+
+router.get("/register", showRegisterForm);
+router.post("/register", registerValidationRules, registerUser);
+
+router.get("/login", showLoginForm);
+router.post("/login", loginValidationRules, loginUser);
+
+router.get("/dashboard", requireLogin, showDashboard);
+
+router.post("/logout", logoutUser);
+
+/* ADMIN USERS PAGE */
+
+router.get("/users", requireLogin, requireRole("admin"), showUsers);
 
 /* ORGANIZATIONS */
 
