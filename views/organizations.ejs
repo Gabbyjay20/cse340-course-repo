@@ -2,11 +2,15 @@
 
 <h1><%= title %></h1>
 
+<p>
+  <a href="/new-organization">Add Organization</a>
+</p>
+
 <div class="organization-list">
   <% organizations.forEach((organization) => { %>
     <section class="card">
-      <img 
-        src="/images/<%= organization.logo_filename %>" 
+      <img
+        src="/images/<%= organization.logo_filename %>"
         alt="<%= organization.name %> logo"
         class="organization-logo"
       >
@@ -19,6 +23,12 @@
 
       <p><%= organization.description %></p>
       <p><strong>Contact:</strong> <%= organization.contact_email %></p>
+
+      <p>
+        <a href="/edit-organization/<%= organization.organization_id %>">
+          Edit Organization
+        </a>
+      </p>
     </section>
   <% }) %>
 </div>
