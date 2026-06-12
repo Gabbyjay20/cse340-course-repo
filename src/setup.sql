@@ -1,7 +1,9 @@
+DROP TABLE IF EXISTS project_volunteer;
 DROP TABLE IF EXISTS project_category;
 DROP TABLE IF EXISTS project;
 DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS organization;
+DROP TABLE IF EXISTS app_user;
 
 CREATE TABLE organization (
     organization_id SERIAL PRIMARY KEY,
@@ -39,6 +41,29 @@ CREATE TABLE project_category (
 
     FOREIGN KEY (category_id)
         REFERENCES category(category_id)
+);
+
+CREATE TABLE app_user (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'user'
+);
+
+CREATE TABLE project_volunteer (
+    project_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+
+    PRIMARY KEY (project_id, user_id),
+
+    FOREIGN KEY (project_id)
+        REFERENCES project(project_id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (user_id)
+        REFERENCES app_user(user_id)
+        ON DELETE CASCADE
 );
 
 INSERT INTO organization (
@@ -128,11 +153,3 @@ VALUES
 (3, 1),
 (4, 2),
 (5, 4);
-
-CREATE TABLE IF NOT EXISTS app_user (
-    user_id SERIAL PRIMARY KEY,
-    name VARCHAR(150) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL DEFAULT 'user'
-);

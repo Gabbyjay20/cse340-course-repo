@@ -10,6 +10,34 @@
   </p>
 <% } %>
 
+<h2>Projects I Am Volunteering For</h2>
+
+<% if (volunteerProjects.length === 0) { %>
+  <p>You have not volunteered for any projects yet.</p>
+<% } else { %>
+  <ul>
+    <% volunteerProjects.forEach((project) => { %>
+      <li>
+        <a href="/project/<%= project.project_id %>">
+          <%= project.title %>
+        </a>
+        -
+        <%= project.location %>
+        -
+        <%= new Date(project.project_date).toLocaleDateString() %>
+
+        <form
+          action="/remove-volunteer/<%= project.project_id %>"
+          method="POST"
+          style="display:inline;"
+        >
+          <button type="submit">Remove</button>
+        </form>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
+
 <form action="/logout" method="POST">
   <button type="submit">Logout</button>
 </form>

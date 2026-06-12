@@ -10,6 +10,11 @@ import {
   logoutUser
 } from "./controllers/authController.js";
 
+import {
+  volunteerForProject,
+  removeVolunteerFromProject
+} from "./controllers/volunteerController.js";
+
 import { showUsers } from "./controllers/usersController.js";
 
 import {
@@ -129,6 +134,18 @@ router.post("/new-project", projectValidationRules, createNewProject);
 router.get("/edit-project/:id", showEditProjectForm);
 router.post("/edit-project/:id", projectValidationRules, updateExistingProject);
 
+router.post(
+  "/volunteer/:projectId",
+  requireLogin,
+  volunteerForProject
+);
+
+router.post(
+  "/remove-volunteer/:projectId",
+  requireLogin,
+  removeVolunteerFromProject
+);
+
 router.get("/assign-categories/:projectId", showAssignCategoriesForm);
 router.post("/assign-categories/:projectId", saveProjectCategories);
 
@@ -144,3 +161,4 @@ router.get("/edit-category/:id", showEditCategoryForm);
 router.post("/edit-category/:id", categoryValidationRules, updateExistingCategory);
 
 export default router;
+

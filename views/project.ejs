@@ -18,7 +18,9 @@
 <ul>
   <% categories.forEach((category) => { %>
     <li>
-      <a href="/category/<%= category.category_id %>"><%= category.name %></a>
+      <a href="/category/<%= category.category_id %>">
+        <%= category.name %>
+      </a>
     </li>
   <% }) %>
 </ul>
@@ -28,5 +30,18 @@
     Assign Categories
   </a>
 </p>
+
+<% if (currentUser) { %>
+
+  <form
+    action="/volunteer/<%= project.project_id %>"
+    method="POST"
+  >
+    <button type="submit">
+      Volunteer For This Project
+    </button>
+  </form>
+
+<% } %>
 
 <%- include("partials/footer") %>

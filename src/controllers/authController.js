@@ -1,6 +1,11 @@
 import bcrypt from "bcryptjs";
 import { validationResult } from "express-validator";
-import { createUser, getUserByEmail } from "../models/users.js";
+
+import {
+  createUser,
+  getUserByEmail,
+  getVolunteerProjects
+} from "../models/users.js";
 
 const showRegisterForm = (req, res) => {
   res.render("register", {
@@ -108,10 +113,13 @@ const loginUser = async (req, res) => {
   res.redirect("/dashboard");
 };
 
-const showDashboard = (req, res) => {
+const showDashboard = async (req, res) => {
+  const volunteerProjects = await getVolunteerProjects(req.session.user.user_id);
+
   res.render("dashboard", {
     title: "Dashboard",
-    user: req.session.user
+    user: req.session.user,
+    volunteerProjects
   });
 };
 
